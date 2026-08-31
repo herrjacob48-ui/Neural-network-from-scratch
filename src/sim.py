@@ -3,7 +3,11 @@ import numpy as np
 import sys
 from network import Network
 
+#defining activation function
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
 #initialize nueral network
+net = Network([4,8,1], activation=sigmoid, rate=0.001)
 
 
 # Initialize Pygame
@@ -29,6 +33,7 @@ x = 0.0
 x_dot = 0.0
 theta = 0.5  # Small initial offset so you can watch the PID catch and balance it!
 theta_dot = 0.0
+
 
 # --- PID Controller Constants ---
 # Tune these gains to adjust how aggressively the cart balances
@@ -60,6 +65,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+    state = np.array([[theta], [theta_dot], [x], [x_dot]])
 
     # 2. PID Controller Calculation
     # Normalize theta error to handle wrapping if needed
@@ -72,14 +78,19 @@ while running:
 
     # Compute required force to balance the pendulum at the given angle/velocity
     # We add a secondary outer control loop (Kp_x, Kd_x) to prevent the cart from drifting off screen
-    force = (Kp_theta * theta_error + 
+    pid_force = (Kp_theta * theta_error + 
              Kd_theta * theta_dot_error + 
              Ki_theta * integral_theta_error +
              Kp_x * (x - 0.0) + 
              Kd_x * x_dot)
+    pid_force = np.clip(pid_force, -100.0, 100.0)
+    pid_force = np.array([[pid_force]], dtype=float)
 
-    # Clip maximum motor force to realistic limits (Newtons)
+    state = np.array([[theta], [theta_dot], [x], [x_dot]], dtype=float)
+    force = net.forward_pass(state)[0][0]
     force = np.clip(force, -100.0, 100.0)
+
+    net.train(state, pid_force)
 
     # 3. Physics Engine (Inverted Pendulum Equations of Motion)
     sin_t = np.sin(theta)

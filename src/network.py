@@ -1,6 +1,7 @@
 import numpy as np
 from layer import Layer
 
+
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
@@ -58,9 +59,10 @@ class Network:
             self.layers[i].b -= self.deltas[i] * self.learning_rate
 
     def train(self,x,y):
+        
         self.forward_pass(x)
         self.calculate_cost(x,y)
         self.compute_deltas(y)
         self.backpropagation(x)
         self.gradient_descent()
-        return self.cost
+        return self.cost 
