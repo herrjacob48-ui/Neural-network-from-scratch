@@ -1,6 +1,13 @@
 import numpy as np
 from layer import Layer
 
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def sigmoid_prime(x):
+    s = sigmoid(x)
+    return s * (1 - s)
+
 class Network:
 
     # pass a list like [2,8,8,1] for a 2-8-8-1 structure
@@ -26,4 +33,20 @@ class Network:
         output = self.forward_pass(x)
         for i in range(len(output)):
             self.cost += 0.5 * pow(output[i]- y[i], 2)
-        
+
+    def compute_deltas(self, y):
+        self.deltas = [None] * len(self.layers)
+        for i in range(len(self.layers)-1,-1,-1):
+            if i == len(self.layers)-1:
+                delta = (self.layers[i].a - y) * sigmoid_prime(self.layers[i].z)
+            else:
+                 delta = (np.transpose(self.layers[i+1].w) @ self.deltas[i+1]) * sigmoid_prime(self.layers[i].z)  
+            self.deltas[i] = delta
+
+    def backpropagation(self, x):
+        self.gradients = [None] * len(self.layers)
+        for i in range(len(self.layers)-1,-1,-1):
+            if i == 0:
+                self.gradients[i] = self.deltas[i] @ np.transpose(x)
+            else:
+                self.gradients[i] = self.deltas[i] @ np.transpose(self.layers[i-1].a)
