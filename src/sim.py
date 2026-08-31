@@ -1,6 +1,10 @@
 import pygame
 import numpy as np
 import sys
+from network import Network
+
+#initialize nueral network
+
 
 # Initialize Pygame
 pygame.init()
@@ -123,6 +127,7 @@ while running:
     font = pygame.font.SysFont(None, 24)
     screen.blit(font.render(f"Required PID Force: {force:.2f} N", True, (0, 0, 0)), (20, 20))
 
+    #AI IMPLEMENTATION
   
 
     pygame.display.flip()
@@ -132,9 +137,6 @@ pygame.quit()
 sys.exit()
 
     
-
-
-
 
 
 

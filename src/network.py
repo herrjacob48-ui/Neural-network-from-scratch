@@ -52,7 +52,15 @@ class Network:
             else:
                 self.gradients[i] = self.deltas[i] @ np.transpose(self.layers[i-1].a)
 
-    def update_weights(self):
+    def gradient_descent(self):
         for i in range(len(self.layers)):
             self.layers[i].w -= self.gradients[i] * self.learning_rate
-            self.layers[i].b -= self.deltas[i] * self.lean
+            self.layers[i].b -= self.deltas[i] * self.learning_rate
+
+    def train(self,x,y):
+        self.forward_pass(x)
+        self.calculate_cost(x,y)
+        self.compute_deltas(y)
+        self.backpropagation(x)
+        self.gradient_descent()
+        return self.cost
