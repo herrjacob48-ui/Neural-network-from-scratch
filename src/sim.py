@@ -29,7 +29,7 @@ BALL_SPEED_START = 3.0
 BALL_SPEED_MAX = 11.0
 BALL_SPEED_STEP = 0.15   # speed increase per drop, regardless of catch/miss
 
-PADDLE_MAX_SPEED = 9.0   # px/frame the paddle can move toward its target
+PADDLE_MAX_SPEED = 25.0   # px/frame the paddle can move toward its target
 FASTFORWARD_STEPS = 25   # training-only steps done per frame while holding SPACE
 
 BG = (18, 18, 24)
@@ -70,7 +70,7 @@ class GameState:
 def build_network():
     # inputs: ball_x (norm), ball_y (norm), paddle_center_x (norm)
     # output: predicted ideal paddle_center_x (norm)
-    return Network([3, 8, 8, 1], sigmoid, rate=0.6)
+    return Network([3, 16, 16, 1], sigmoid, rate=0.6)
 
 
 def get_state_vector(game):
