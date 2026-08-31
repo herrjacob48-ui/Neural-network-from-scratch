@@ -11,9 +11,10 @@ def sigmoid_prime(x):
 class Network:
 
     # pass a list like [2,8,8,1] for a 2-8-8-1 structure
-    def __init__(self, structure, activation):
+    def __init__(self, structure, activation, rate):
         self.layers = []
         self.activation = activation
+        self.learning_rate = rate
         for i in range(len(structure)-1):
             n_in = structure[i]
             n_out = structure[i+1]
@@ -50,3 +51,8 @@ class Network:
                 self.gradients[i] = self.deltas[i] @ np.transpose(x)
             else:
                 self.gradients[i] = self.deltas[i] @ np.transpose(self.layers[i-1].a)
+
+    def update_weights(self):
+        for i in range(len(self.layers)):
+            self.layers[i].w -= self.gradients[i] * self.learning_rate
+            self.layers[i].b -= self.deltas[i] * self.lean
