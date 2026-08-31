@@ -1,15 +1,3 @@
-"""
-CONTROLS:
-  T         - toggle training on/off
-  H         - toggle control: NN vs. the perfect heuristic (for comparison)
-  R         - reset the network (re-randomize weights) and game stats
-  SPACE     - hold to fast-forward (multiple train steps per rendered frame)
-  ESC / Q   - quit
-
-Requires: pip install pygame numpy
-Run:      python game.py
-"""
-
 import random
 from collections import deque
 
